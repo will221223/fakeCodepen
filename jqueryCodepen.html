@@ -1,0 +1,244 @@
+<html>
+
+<head>
+
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+  <style>
+  body{
+    margin: 0;
+    padding: 0;
+    background-color:rgb(137, 148, 164);
+    overflow:hidden;
+  }
+  #manu {
+    width: 100%;
+    height: 60px;
+    background-color: black;
+    font-family: "Helvatica Neue","Helvatica","Arial";
+
+  }
+  .topBar{
+    width: 1200px;
+    margin: auto;
+    padding-top: 15px;
+  }
+  #title{
+    color: white;
+    float: left;
+    font-size: 1.5em;
+    margin-left: 450px;
+  }
+  .button{
+    float: right;
+    font-size: 18px;
+    width: 120px;
+    border: none;
+    padding: 5px;
+    border-radius: 4px;
+    background-color: rgb(199, 103, 245);
+    /* 讓鼠標移過去變手指 */
+    cursor:pointer;
+  }
+  .button span{
+    transition: 0.5s;
+  }
+  .button span::after{
+    content: "\00bb";
+    color: black;
+    position:absolute;
+    opacity: 0;
+    right: 0px;
+    transition: 0.5s;
+  }
+  .button:hover span{
+    position: relative;
+    padding-right: 25px;
+  }
+  .button:hover span::after{
+    opacity: 1;
+    right:0;
+  }
+/* ======================================== */
+  .clear{
+    clear: both;
+  }
+  /* ======================================== */
+  #accordion{
+    background-color:rgb(199, 103, 245);
+    width: 100%;
+    height: 400px;
+    margin: auto;
+
+    overflow: hidden;
+  }
+  #accordion h3, #accordion div{
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+  }
+  #accordion h3{
+    background-color: rgb(53, 55, 62);
+    color: white;
+    transform: rotate(270deg);
+    width: 400px;
+    height: 30px;
+    margin: 185px 0 0 -170px;
+  }
+  #accordion div{
+    width: 340px;
+    height: 400px;
+    margin: 0 5px 0 -170px;
+  }
+  textarea{
+    width: 100%;
+    height: inherit;
+    /* 讓文字框不能自行拖拉大小 使用RESIZE控制 */
+    resize: none;
+    background-color: inherit;
+    border: none;
+
+    font-size: 20px;
+  }
+  /* ======================================== */
+  #resultContent{
+    background-color: rgb(137, 148, 164);
+    width: 100%;
+    height: 100%
+  }
+  h2{
+    width: 100%;
+    height: 30px;
+    background-color: rgb(53, 55, 62);
+    color: white;
+    text-align: center;
+    margin: 0;
+    font-family: "Helvatica Neue","Helvatica","Arial";
+    font-weight: normal;
+  }
+  iframe{
+    border: none;
+    width: 100%;
+    height: 100%;
+    /* background-color:  */
+  }
+  .footer{
+    background-color: rgb(53, 55, 62);
+    width: 100%;
+    height: 30px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  }
+  </style>
+
+</head>
+
+<body>
+  <div id="manu">
+    <div class="topBar">
+      <div id="title">
+        jQuery練習－－假code pen
+      </div>
+      <button id="run" class="button" type="button" name="button"><span>運行程式</span></button>
+
+    </div>
+  </div>
+
+  <div class="clear"></div>
+
+  <ul id="accordion">
+    <h3 id="htmlTitle" class="change">HTML</h3>
+    <div class="codeContainer">
+      <textarea id="htmlText">
+
+      </textarea>
+    </div>
+
+    <h3 id="cssTitle" class="change">CSS</h3>
+    <div class="codeContainer">
+      <textarea id="cssText">
+
+      </textarea>
+    </div>
+    <h3 id="jsTitle" class="change">JavaScript</h3>
+    <div class="codeContainer">
+      <textarea id="jsText">
+
+      </textarea>
+    </div>
+  </ul>
+
+  <div class="clear"></div>
+
+  <div id="resultContent">
+    <h2>結果</h2>
+    <iframe id="result"></iframe>
+  </div>
+
+  <div class="footer"></div>
+
+</body>
+
+<script type="text/javascript">
+  $(".codeContainer").hide();
+  // $("#htmlTitle").css("margin-left","-200px");
+  $("#cssTitle").css("margin-left","-310px");
+  $("#jsTitle").css("margin-left","-310px");
+
+  // 設置結果的高度，隨調整而改變
+  var $result = $("#result");
+  var $window = $(window).on("resize",function(){
+
+    var height = $(this).height()-520;
+    $result.height(height);
+  }).trigger("resize");
+
+  $(".change").click(function(event){
+    $(this).nextAll(".change").css("margin-left","-150px");
+    $(this).nextAll(".codeContainer").animate(
+      {width:"0px"},
+      {duration:1500,queue:false}
+    );
+    $(this).next().animate(
+      {
+      backgroundColor:"rgb(137, 148, 164)"
+      }
+    );
+
+
+    var distance = $(this).offset().left;
+      // console.log(distance)
+      if (distance>850){
+        $(this).prevAll(".change").animate(
+          {marginLeft:"-150px"},
+          {duration:700,queue:false}
+        );
+        $(this).next().animate(
+          {width:"850px"},
+          {duration:2000,queue:false}
+        );
+        $(this).prevAll(".codeContainer").animate(
+          {width:"0px"},
+          {duration:1000,queue:false}
+        )
+      }else {
+        $(this).next().animate(
+          {width:"850px"},
+          {duration:2000,queue:false}
+        );
+      }
+  });
+    $("#run").click(function(){
+
+      $("#result").contents().find("head").html("<style>"+$("#cssText").val()+"</style>");
+      $("#result").contents().find("body").html($("#htmlText").val());
+      document.getElementById("result").contentWindow.eval($("#jsText").val());
+    })
+
+</script>
+
+</html>
